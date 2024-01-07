@@ -37,7 +37,7 @@ This project is a React.js web application that fetches real-time cryptocurrency
 
 
 Getting Started
-1. Clone the repository: git clone https://github.com/your-username/binance-websocket-dashboard.git
+1. Clone the repository: git clone https://github.com/Nehorai444/binance-websocket-dashboard.git
 2. Navigate to the project directory: cd binance-websocket-dashboard
 3. Install dependencies: npm install
 4. Start the development server: npm start
