@@ -7,6 +7,7 @@ This project is a React.js web application that fetches real-time cryptocurrency
 
 ## Project Structure
 
+```markdown
 ├── src
 │   ├── App.css
 │   ├── App.js
@@ -56,17 +57,25 @@ This project is a React.js web application that fetches real-time cryptocurrency
    npm install
    ```
 
-4. **Start the development server:**
+4. **Build the project:**
 
    ```bash
-   npm start
+   npm run build
    ```
 
-   This will launch the React.js application. Additionally, ensure that MongoDB is running for data storage.
+5. **Start the production server:**
 
-## WebSocket Setup
+   ```bash
+   node server/server.js
+   ```
 
-The WebSocket functionality is managed in the `binanceWebsocket.js` file in the `server` directory. Make sure to configure it as needed for your Binance WebSocket connection.
+6. **Run the WebSocket server:**
+
+   ```bash
+   node server/binanceWebsocket.js
+   ```
+
+   Make sure to configure the WebSocket server as needed for your Binance WebSocket connection.
 
 ## Features
 
