@@ -7,7 +7,6 @@ This project is a React.js web application that fetches real-time cryptocurrency
 
 ## Project Structure
 
-```markdown
 ├── src
 │   ├── App.css
 │   ├── App.js
