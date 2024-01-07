@@ -1,3 +1,4 @@
+```markdown
 # Binance WebSocket Data Dashboard
 
 ## Overview
@@ -34,46 +35,67 @@ This project is a React.js web application that fetches real-time cryptocurrency
     ├── package.json
     ├── package-lock.json
     └── server.js
+```
 
+## Getting Started
 
-Getting Started
-1. Clone the repository: git clone https://github.com/Nehorai444/binance-websocket-dashboard.git
-2. Navigate to the project directory: cd binance-websocket-dashboard
-3. Install dependencies: npm install
-4. Start the development server: npm start
+1. **Clone the repository:**
 
-This will launch the React.js application. Additionally, ensure that MongoDB is running for data storage.
+   ```bash
+   git clone https://github.com/your-username/binance-websocket-dashboard.git
+   ```
 
+2. **Navigate to the project directory:**
 
-Server Setup
-1. Navigate to the server directory: cd server
-2. Install server dependencies: npm install
-3. Start the server: node server.js
-5. node binanceWebsocket.js
-This will start the WebSocket server and handle data conversion and storage.
+   ```bash
+   cd binance-websocket-dashboard
+   ```
 
-Features
-*Real-time cryptocurrency data from Binance WebSocket.
-*WebSocket communication between the client and server.
-*Data storage in MongoDB.
-*Graphical representation of cryptocurrency data.
+3. **Install dependencies:**
 
-Technologies Used
-#React.js
-#Binance WebSocket API
-#MongoDB
-#Node.js
-#Express.js
-#WebSocket library
+   ```bash
+   npm install
+   ```
 
-License
-This project is licensed under the MIT License.
+4. **Start the development server:**
 
-Acknowledgments
-*Binance API Documentation
-*React
-*Node.js
-*Express.js
+   ```bash
+   npm start
+   ```
 
-WebSocket library
+   This will launch the React.js application. Additionally, ensure that MongoDB is running for data storage.
+
+## WebSocket Setup
+
+The WebSocket functionality is managed in the `binanceWebsocket.js` file in the `server` directory. Make sure to configure it as needed for your Binance WebSocket connection.
+
+## Features
+
+- Real-time cryptocurrency data from Binance WebSocket.
+- WebSocket communication between the client and server.
+- Data storage in MongoDB.
+- Graphical representation of cryptocurrency data.
+
+## Technologies Used
+
+- React.js
+- Binance WebSocket API
+- MongoDB
+- Node.js
+- Express.js
+- WebSocket library
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgments
+
+- [Binance API Documentation](https://binance-docs.github.io/apidocs/spot/en/)
+- [React](https://reactjs.org/)
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [WebSocket library](https://github.com/websockets/ws)
+
 Happy coding!
+```
