@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Graph from './shelves/Graph';
-import { Utilities } from '../library/ApiRequests';
+import { ApiRequest } from '../library/Utilities';
 
 export default function Coin(props) {
     const [startDate, setStartDate] = useState("");
@@ -10,7 +10,7 @@ export default function Coin(props) {
 
     function onClick() {
         if (!startDate || !endDate) return
-        Utilities.search(startDate, endDate, props.val.tradingPair)
+        ApiRequest.search(startDate, endDate, props.val.tradingPair)
             .then(res => {
                 setDataCoin(res.data);
                 setFlag(!flag);

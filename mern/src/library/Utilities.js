@@ -16,4 +16,4 @@ const search = (startDate, endDate, coinName) => {
     })
 }
 
-export const Utilities = { search }
+export const ApiRequest = { search }
