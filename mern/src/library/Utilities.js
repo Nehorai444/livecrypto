@@ -6,7 +6,7 @@ const search = (startDate, endDate, coinName) => {
                 "Content-Type": "application/json"
             }, body: JSON.stringify({ startDate, endDate, coinName })
         }
-        fetch("/searchCoinData", requestInit)
+        fetch("/api/searchCoinData", requestInit)
             .then(res => {
                 resolve(res.json())
             })

@@ -1,9 +1,10 @@
 const db = require('mongoose');
-
 const URL = 'mongodb://localhost:27017';
 
+const {logger} = require("./logging")
+
 db.connect(URL).then(() => {
-  console.log('DB is on')
+  logger.info('DB is on')
 });
 
 const staticCoinScheme = db.Schema({

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const WebSocket = require('ws');
 
+const {logger} = require("./logging")
 const { coinModel, staticCoinModel } = require("./coins");
 const {convertData} = require("./convertData");
 
@@ -15,7 +16,7 @@ const wss = new WebSocket.Server({ noServer: true });
 
 let index = 1;
 wss.on('connection', (ws, req) => {
-    console.log('A client connected');
+    logger.info('A client connected');
 
     // Update the WebSocket URL to listen to the 'All Market Mini Tickers' stream
     const binanceWebSocket = new WebSocket('wss://stream.binance.com:9443/ws/!ticker@arr');
@@ -41,21 +42,21 @@ wss.on('connection', (ws, req) => {
             await coinModel.insertMany(tickerData);
             ws.send(JSON.stringify(tickerData));
         } catch (error) {
-            console.error('Error parsing response data:', error);
+            logger.error('Error parsing response data:', error);
         }
     });
 
     binanceWebSocket.on('error', (error) => {
-        console.error('Binance WebSocket error:', error);
+        logger.error('Binance WebSocket error:', error);
     });
 
     ws.on('message', (message) => {
         // Handle client messages if needed
-        console.log(`Received from client:${message}`);
+        logger.info(`Received from client:${message}`);
     });
 
     ws.on('close', () => {
-        console.log('Client disconnected');
+        logger.info('Client disconnected');
         binanceWebSocket.close();
     });
 });
@@ -72,5 +73,5 @@ server.on('upgrade', (request, socket, head) => {
 
 
 server.listen(PORT, () => {
-    console.log('Server works on PORT 4000');
+    logger.info('Server works on PORT 4000');
 });
