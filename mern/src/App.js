@@ -4,8 +4,12 @@ import { Routes, Route } from 'react-router-dom';
 import Menu from './components/Menu';
 import HomePage from './components/HomePage';
 import CoinsList from './components/CoinsList';
+import { useTranslation } from 'react-i18next';
+import Header from './components/Header';
 function App() {
   const [data, setData] = useState([]);
+  const {t} = useTranslation()
+
 
   useEffect(() => {
     // Create a new WebSocket connection when the component mounts
@@ -35,13 +39,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    document.title = "CoinMaster"
+    document.title = t('appTitle')
   }, [])
   return (
     <div className="App">
       <Menu />
-      <h1>CoinMaster</h1>
-
+      <Header />
       <Routes>
         <Route path="/allCoins" element={<CoinsList data={data} />} />
         <Route path="/" element={<HomePage data={data} />} />

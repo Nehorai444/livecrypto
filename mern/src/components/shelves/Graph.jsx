@@ -1,8 +1,10 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const Graph = (props) => {
     const { data, setFlag } = props;
+    const { t } = useTranslation();
 
     // Assuming data is an array of objects with eventTimestamp and currentPrice properties
     const formattedData = data.map((entry) => ({
@@ -26,7 +28,7 @@ const Graph = (props) => {
                 </LineChart>
             </ResponsiveContainer>
             <button onClick={onClick} className="hide-button">
-                Hide
+                {t('hideButtonText')}
             </button>
         </div>
     );
