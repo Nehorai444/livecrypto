@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Header from './components/Header';
 function App() {
   const [data, setData] = useState([]);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
 
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    document.title = t('appTitle')
+    document.title = "CoinMaster"
   }, [])
   return (
     <div className="App">
