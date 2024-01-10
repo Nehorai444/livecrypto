@@ -4,32 +4,44 @@
 Welcome to the Binance WebSocket Data Visualization project! This application fetches real-time cryptocurrency data from Binance WebSocket, displays it to the user using WebSocket, and saves the data in MongoDB. Users can inquire about specific coins, and the application will generate a graph depicting the coin's performance at the requested time.
 
 ## Project Structure
-├── src
-│   ├── App.css
-│   ├── App.js
-│   ├── App.test.js
-│   ├── components
-│   │   ├── Coin.jsx
-│   │   ├── CoinsList.jsx
-│   │   ├── Header.jsx
-│   │   ├── HomePage.jsx
-│   │   ├── Loader.jsx
-│   │   ├── Menu.jsx
-│   │   └── shelves
-│   │       └── Graph.jsx
-│   ├── i18n.js
-│   ├── index.css
-│   ├── index.js
-│   ├── library
-│   │   └── Utilities.js
-│   ├── locales
-│   │   ├── en.json
-│   │   ├── es.json
-│   │   ├── he.json
-│   │   └── zh.json
-│   ├── logo.svg
-│   ├── reportWebVitals.js
-│   └── setupTests.js
+├── mern
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   ├── README.md
+│   └── src
+│       ├── App.css
+│       ├── App.js
+│       ├── App.test.js
+│       ├── components
+│       │   ├── Coin.jsx
+│       │   ├── CoinsList.jsx
+│       │   ├── Header.jsx
+│       │   ├── HomePage.jsx
+│       │   ├── Loader.jsx
+│       │   ├── Menu.jsx
+│       │   └── shelves
+│       │       └── Graph.jsx
+│       ├── i18n.js
+│       ├── index.css
+│       ├── index.js
+│       ├── library
+│       │   └── Utilities.js
+│       ├── locales
+│       │   ├── en.json
+│       │   ├── es.json
+│       │   ├── he.json
+│       │   └── zh.json
+│       ├── logo.svg
+│       ├── reportWebVitals.js
+│       └── setupTests.js
+├── README.md
 └── server
     ├── binanceWebsocket.js
     ├── coins.js
