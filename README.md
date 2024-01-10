@@ -5,8 +5,6 @@ Welcome to the Binance WebSocket Data Visualization project! This application fe
 
 ## Project Structure
 
-```plaintext
-.
 ├── package.json
 ├── package-lock.json
 ├── public
