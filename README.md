@@ -4,17 +4,6 @@
 Welcome to the Binance WebSocket Data Visualization project! This application fetches real-time cryptocurrency data from Binance WebSocket, displays it to the user using WebSocket, and saves the data in MongoDB. Users can inquire about specific coins, and the application will generate a graph depicting the coin's performance at the requested time.
 
 ## Project Structure
-
-├── package.json
-├── package-lock.json
-├── public
-│   ├── favicon.ico
-│   ├── index.html
-│   ├── logo192.png
-│   ├── logo512.png
-│   ├── manifest.json
-│   └── robots.txt
-├── README.md
 ├── src
 │   ├── App.css
 │   ├── App.js
