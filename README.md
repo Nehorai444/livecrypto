@@ -7,13 +7,6 @@ Welcome to the Binance WebSocket Data Visualization project! This application fe
 ├── mern
 │   ├── package.json
 │   ├── package-lock.json
-│   ├── public
-│   │   ├── favicon.ico
-│   │   ├── index.html
-│   │   ├── logo192.png
-│   │   ├── logo512.png
-│   │   ├── manifest.json
-│   │   └── robots.txt
 │   ├── README.md
 │   └── src
 │       ├── App.css
@@ -29,7 +22,6 @@ Welcome to the Binance WebSocket Data Visualization project! This application fe
 │       │   └── shelves
 │       │       └── Graph.jsx
 │       ├── i18n.js
-│       ├── index.css
 │       ├── index.js
 │       ├── library
 │       │   └── Utilities.js
@@ -39,7 +31,6 @@ Welcome to the Binance WebSocket Data Visualization project! This application fe
 │       │   ├── he.json
 │       │   └── zh.json
 │       ├── logo.svg
-│       ├── reportWebVitals.js
 │       └── setupTests.js
 ├── README.md
 └── server
