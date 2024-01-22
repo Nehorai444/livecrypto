@@ -46,18 +46,10 @@ Briefly describe your project and its main goals. Highlight what makes your proj
 
 Directory Structure
 package.json: Node.js package configuration file.
-package-lock.json: Lock file for package versions.
-public: Directory containing static assets and the HTML file.
-favicon.ico: Favicon image.
-index.html: HTML entry point for the React application.
-logo192.png and logo512.png: Logo images.
-manifest.json: Web app manifest file.
-robots.txt: File for directing web crawlers.
 README.md: Documentation file.
 src: Source code directory.
 App.css: Stylesheet for the main React component.
 App.js: Main React component file.
-App.test.js: Testing file for the main component.
 components: Directory containing React components.
 Coin.jsx: Component for displaying individual cryptocurrency data.
 CoinsList.jsx: Component for displaying the list of cryptocurrencies.
@@ -73,8 +65,6 @@ library: Directory for utility functions or modules.
 Utilities.js: Utility functions.
 locales: Directory for localization files for different languages.
 en.json, es.json, he.json, zh.json: Language-specific JSON files.
-logo.svg: Logo file.
-setupTests.js: Configuration file for Jest testing.
 
 ## Features
 
