@@ -3,25 +3,6 @@
 
 Welcome to the Binance WebSocket Data Dashboard project! This real-time cryptocurrency dashboard fetches data from Binance WebSocket, displays it using WebSocket, and stores the data in MongoDB. Users can explore specific coins, and the application generates graphs depicting the coin's performance over time.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [Features](#features)
-- [Compression and Decompression](#compression-and-decompression)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Project](#running-the-project)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Build and Deployment](#build-and-deployment)
-- [Troubleshooting](#troubleshooting)
-- [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
 ## Overview
 
 Briefly describe your project and its main goals. Highlight what makes your project unique or stand out.
