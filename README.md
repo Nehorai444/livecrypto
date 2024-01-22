@@ -4,7 +4,7 @@
 Welcome to the Binance-WebSocket-Data-Dashboard project! This application fetches real-time cryptocurrency data from Binance WebSocket, displays it to the user using WebSocket, and saves the data in MongoDB. Users can inquire about specific coins, and the application will generate a graph depicting the coin's performance at the requested time.
 
 ## Project Structure
-```
+
 ├── mern
 │   ├── package.json
 │   ├── package-lock.json
@@ -42,7 +42,7 @@ Welcome to the Binance-WebSocket-Data-Dashboard project! This application fetche
     ├── package.json
     ├── package-lock.json
     └── server.js
-```
+
 
 ## Server
 
