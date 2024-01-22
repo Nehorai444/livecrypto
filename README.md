@@ -158,5 +158,4 @@ Specify the license under which your project is distributed. For example, use th
 Give credit to external libraries, tools, or individuals who have contributed to your project.
 
 ---
-happy hacking
 ```
