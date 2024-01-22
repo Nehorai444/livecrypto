@@ -4,6 +4,7 @@
 Welcome to the Binance-WebSocket-Data-Dashboard project! This application fetches real-time cryptocurrency data from Binance WebSocket, displays it to the user using WebSocket, and saves the data in MongoDB. Users can inquire about specific coins, and the application will generate a graph depicting the coin's performance at the requested time.
 
 ## Project Structure
+```
 ├── mern
 │   ├── package.json
 │   ├── package-lock.json
@@ -47,17 +48,18 @@ Welcome to the Binance-WebSocket-Data-Dashboard project! This application fetche
 
 The server is the heart of this project, utilizing WebSocket communication for real-time data and logging. Below are the key server files:
 
-- **`server.js`**: The main entry point for the server.
-- **`binanceWebsocket.js`**: Manages the Binance WebSocket communication, receiving data from the Binance WebSocket and processing it for the application.
-- **`coins.js`**: Handles the logic related to cryptocurrency data and interactions.
-- **`convertData.js`**: Converts and formats data as needed for the application.
-- **`logging.js`**: Manages server-side logging for monitoring and debugging.
+- **server.js:** The main entry point for the server.
+- **binanceWebsocket.js:** Manages the Binance WebSocket communication, receiving data from the Binance WebSocket and processing it for the application.
+- **coins.js:** Handles the logic related to cryptocurrency data and interactions.
+- **convertData.js:** Converts and formats data as needed for the application.
+- **logging.js:** Manages server-side logging for monitoring and debugging.
+- **Internationalization (i18n):** The application supports multiple languages. Language files are located in the locales directory. Currently supported languages include English (en.json), Spanish (es.json), Hebrew (he.json), and Chinese (zh.json).
 
-## Internationalization (i18n)
+To add more languages, create a new JSON file in the locales directory and import it in the i18n.js file.
 
-The application supports multiple languages. Language files are located in the `locales` directory. Currently supported languages include English (`en.json`), Spanish (`es.json`), Hebrew (`he.json`), and Chinese (`zh.json`).
+## Compression and Decompression using pako
 
-To add more languages, create a new JSON file in the `locales` directory and import it in the `i18n.js` file.
+The latest update includes a new compression and decompression mechanism using the `pako` library. This ensures efficient data transfer between the server and client using WebSocket.
 
 ## Getting Started
 
@@ -85,7 +87,7 @@ To add more languages, create a new JSON file in the `locales` directory and imp
     npm start
     ```
 
-    This will launch the React.js application. Make sure to have MongoDB running for data storage.
+   This will launch the React.js application. Make sure to have MongoDB running for data storage.
 
 ## Configuration
 
@@ -95,9 +97,9 @@ To add more languages, create a new JSON file in the `locales` directory and imp
 
 ## Usage
 
-1. Open your browser and visit `http://localhost:3000`.
-2. Explore real-time cryptocurrency data and utilize WebSocket features.
-3. Inquire about specific coins to view performance graphs.
+- Open your browser and visit http://localhost:3000.
+- Explore real-time cryptocurrency data and utilize WebSocket features.
+- Inquire about specific coins to view performance graphs.
 
 ## Technologies Used
 
@@ -106,15 +108,17 @@ To add more languages, create a new JSON file in the `locales` directory and imp
 - MongoDB
 - Node.js
 - WebSocket library
+- pako for Compression and Decompression
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 
-- [Binance API Documentation](https://binance-docs.github.io/apidocs/spot/en/)
-- [React](https://reactjs.org/)
-- [Node.js](https://nodejs.org/)
+- Binance API Documentation
+- React
+- Node.js
 
 Happy coding!
+```
