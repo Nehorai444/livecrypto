@@ -9,7 +9,6 @@ Briefly describe your project and its main goals. Highlight what makes your proj
 
 ## Project Structure
 
-```plaintext
 ├── package.json
 ├── package-lock.json
 ├── public
