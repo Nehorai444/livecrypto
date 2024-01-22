@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Graph from './shelves/Graph';
 import { ApiRequest } from '../library/Utilities';
 import { useTranslation } from 'react-i18next';

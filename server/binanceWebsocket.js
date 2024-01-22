@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const http = require('http');
 const WebSocket = require('ws');
+const pako = require('pako');
+
 
 const {logger} = require("./logging")
 const { coinModel, staticCoinModel } = require("./coins");
@@ -40,7 +42,8 @@ wss.on('connection', (ws, req) => {
             }
             // Send the tickerData to the WebSocket client
             await coinModel.insertMany(tickerData);
-            ws.send(JSON.stringify(tickerData));
+            const compressedData = pako.deflate(JSON.stringify(tickerData), { to: 'string' });
+            ws.send(compressedData, { binary: true });
         } catch (error) {
             logger.error('Error parsing response data:', error);
         }

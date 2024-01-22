@@ -6,6 +6,8 @@ import HomePage from './components/HomePage';
 import CoinsList from './components/CoinsList';
 import { useTranslation } from 'react-i18next';
 import Header from './components/Header';
+import pako from 'pako';
+
 function App() {
   const [data, setData] = useState([]);
   const { t } = useTranslation();
@@ -14,22 +16,25 @@ function App() {
   useEffect(() => {
     // Create a new WebSocket connection when the component mounts
     const ws = new WebSocket('ws://127.0.0.1:4000');
+    ws.binaryType = 'arraybuffer'; // Set binary type for WebSocket
 
     ws.onopen = () => {
       console.log('Connected to WebSocket server.');
     };
 
     ws.onmessage = (event) => {
-      try {
-        const tradingData = JSON.parse(event.data);
-        setData(tradingData);
-      } catch (error) {
-        console.error('Error parsing trade data:', error);
-      }
-    };
+      const data = event.data;
 
-    ws.onclose = () => {
-      console.log('WebSocket connection closed.');
+      if (data !== undefined) {
+        
+        try {
+          const inflatedData = pako.inflate(data, { to: 'string' }); // decompression
+          setData(JSON.parse(inflatedData));
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+        }
+
+      }
     };
 
     // Close the WebSocket connection when the component unmounts

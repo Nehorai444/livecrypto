@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Coin from './Coin'
 import "../App.css"
 import Loader from './Loader'
