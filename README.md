@@ -9,40 +9,51 @@ Briefly describe your project and its main goals. Highlight what makes your proj
 
 ## Project Structure
 
-├── package.json
-├── package-lock.json
-├── public
-│   ├── favicon.ico
-│   ├── index.html
-│   ├── logo192.png
-│   ├── logo512.png
-│   ├── manifest.json
-│   └── robots.txt
+├── mern
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   ├── README.md
+│   └── src
+│       ├── App.css
+│       ├── App.js
+│       ├── App.test.js
+│       ├── components
+│       │   ├── Coin.jsx
+│       │   ├── CoinsList.jsx
+│       │   ├── Header.jsx
+│       │   ├── HomePage.jsx
+│       │   ├── Loader.jsx
+│       │   ├── Menu.jsx
+│       │   └── shelves
+│       │       └── Graph.jsx
+│       ├── i18n.js
+│       ├── index.js
+│       ├── library
+│       │   └── Utilities.js
+│       ├── locales
+│       │   ├── en.json
+│       │   ├── es.json
+│       │   ├── he.json
+│       │   └── zh.json
+│       ├── logo.svg
+│       └── setupTests.js
 ├── README.md
-└── src
-    ├── App.css
-    ├── App.js
-    ├── App.test.js
-    ├── components
-    │   ├── Coin.jsx
-    │   ├── CoinsList.jsx
-    │   ├── Header.jsx
-    │   ├── HomePage.jsx
-    │   ├── Loader.jsx
-    │   ├── Menu.jsx
-    │   └── shelves
-    │       └── Graph.jsx
-    ├── i18n.js
-    ├── index.js
-    ├── library
-    │   └── Utilities.js
-    ├── locales
-    │   ├── en.json
-    │   ├── es.json
-    │   ├── he.json
-    │   └── zh.json
-    ├── logo.svg
-    └── setupTests.js
+└── server
+    ├── binanceWebsocket.js
+    ├── coins.js
+    ├── convertData.js
+    ├── logging.js
+    ├── package.json
+    ├── package-lock.json
+    └── server.js
+
 
 Directory Structure
 package.json: Node.js package configuration file.
