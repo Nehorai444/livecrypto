@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const {logger} = require("./logging")
 
+// Import the coinModel and staticCoinModel from the coins.js file
 const { coinModel, staticCoinModel } = require("./coins");
 
 const PORT = 8080;
