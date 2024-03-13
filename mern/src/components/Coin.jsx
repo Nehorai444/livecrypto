@@ -11,7 +11,8 @@ export default function Coin(props) {
     const [flag, setFlag] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { t, i18n } = useTranslation();
-    
+  
+    // Function to format the price
     function getFormatPrice(price) {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -20,12 +21,16 @@ export default function Coin(props) {
     }
 
     function onClick() {
+        // Check if the start date and end date are not empty
         if (!startDate || !endDate) return
+
         setIsLoading(true)
+
+        // Call the search function from the ApiRequest library
         ApiRequest.search(startDate, endDate, props.val.tradingPair)
             .then(res => {
-                setDataCoin(res.data);
-                setIsLoading(false)
+                setDataCoin(res.data); // Set the dataCoin state to the data from the server
+                setIsLoading(false);
                 setFlag(!flag);
             })
             .catch(err => {

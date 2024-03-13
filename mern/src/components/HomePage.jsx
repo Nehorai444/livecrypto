@@ -4,23 +4,28 @@ import { useTranslation } from 'react-i18next';
 
 export default function HomePage(props) {
   const [topCoins, setTopCoins] = useState([]);
+  const { t } = useTranslation();
   const [searchText, setSearchText] = useState('');
   let filteredArr;
-  const { t } = useTranslation();
 
   const handleSearch = (e) => {
-    let txt = e.target.value
+    let txt = e.target.value; // Get the value from the search input
+
     setSearchText(txt);
+
+    // If the search input is empty, sort the data by opening price and set the topCoins state to the first 10 items
     if (!txt) {
       filteredArr = props.data.sort((a, b) => b.openingPrice - a.openingPrice);
     } else {
       filteredArr = props.data.filter(val => val.tradingPair.includes(txt.toUpperCase()))
         .sort((a, b) => b.openingPrice - a.openingPrice);
     }
+
     setTopCoins(filteredArr.slice(0, 10));
   }
 
   useEffect(() => {
+    // If the data is received, sort it by opening price and set the topCoins state to the first 10 items
     if (!searchText) {
       filteredArr = props.data.sort((a, b) => b.openingPrice - a.openingPrice);
       setTopCoins(filteredArr.slice(0, 10));

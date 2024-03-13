@@ -9,7 +9,7 @@ export default function CoinsList(props) {
         <div className='coinList'>
             <h2 id='titleCoinList'>{t('receivedTradeDataTitle')}</h2>
             <ul>
-                {props.data.length > 0 ? props.data.map((val, index) => (
+                {props.data.length > 0 ? props.data.map((val, index) => ( // If the data is received, map through it and create a Coin component for each item
                     <li key={index}>
                         <Coin val={val} index={index} />
                     </li>

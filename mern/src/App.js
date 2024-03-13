@@ -29,7 +29,7 @@ function App() {
         
         try {
           const inflatedData = pako.inflate(data, { to: 'string' }); // decompression
-          setData(JSON.parse(inflatedData));
+          setData(JSON.parse(inflatedData)); // Set the data state to the data from the server
           } catch (error) {
             console.error('Error parsing JSON:', error);
         }

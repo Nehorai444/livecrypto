@@ -20,8 +20,11 @@ app.post('/api/searchCoinData', async (req, res) => {
     const parsedStartDate = new Date(startDate);
     const parsedEndDate = new Date(endDate);
 
+    // Check if the parsed dates are valid
     if (!parsedStartDate || !parsedEndDate || !coinName) {
       logger.error(`Data from the client not arrived`)
+
+      // If the parsed dates are invalid, return an error
       return res.status(400).json({ status: 0, data: [], errors: ['Please provide valid startDate, endDate, and coinName.'] });
     }
 
@@ -29,9 +32,14 @@ app.post('/api/searchCoinData', async (req, res) => {
       'eventTimestamp': { $gte: parsedStartDate, $lte: parsedEndDate },
       'tradingPair': coinName,
     };
+
+    // Find the coin data in the database
     const coinData = await coinModel.find(query);
+
     if (coinData.length > 0) {
       logger.info(`The user gets data about ${coinName}.`)
+
+      // If the coin data is found, return it to the client
       res.status(200).json({ status: 1, data: coinData, errors: [] })
     };
   } catch (error) {

@@ -26,24 +26,36 @@ wss.on('connection', (ws, req) => {
     binanceWebSocket.on('message', async (data) => {
         // Parse the data received from the WebSocket
         try {
-            const tickerData = JSON.parse(data);
+
+            const tickerData = JSON.parse(data); // Parse the data
             for (let i = 0; i < tickerData.length; i++) {
-                tickerData[i] = convertData(tickerData[i]);
+                tickerData[i] = convertData(tickerData[i]); // Convert the data
+
                 let temp = {
                     tradingPair: tickerData[i].tradingPair
                 }
+
+                // Check if the coin exists in the database
                 let existingCoin = await staticCoinModel.find(temp);
+
                 if (existingCoin.length === 0) {
                     temp.coinId = index;
                     ++index;
-                    await staticCoinModel.insertMany(temp)
+                    // If the coin doesn't exist, insert it into the database
+                    await staticCoinModel.insertMany(temp);
                 }
-                tickerData[i].coinId = !existingCoin.length === 0? existingCoin.coinId: temp.coinId;
+
+                tickerData[i].coinId = !existingCoin.length === 0? existingCoin.coinId: temp.coinId; // Set the coinId
             }
+
             // Send the tickerData to the WebSocket client
             await coinModel.insertMany(tickerData);
-            const compressedData = pako.deflate(JSON.stringify(tickerData), { to: 'string' });
+
+            const compressedData = pako.deflate(JSON.stringify(tickerData), { to: 'string' }); // Compress the data
+
+            // Send the compressed data to the client
             ws.send(compressedData, { binary: true });
+
         } catch (error) {
             logger.error('Error parsing response data:', error);
         }
@@ -68,6 +80,7 @@ wss.on('connection', (ws, req) => {
 
 const server = http.createServer(app);
 
+// Handle WebSocket upgrade requests
 server.on('upgrade', (request, socket, head) => {
     wss.handleUpgrade(request, socket, head, (ws) => {
         wss.emit('connection', ws, request);
