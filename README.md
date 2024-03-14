@@ -1,4 +1,4 @@
-Binance WebSocket Data Dashboard
+# Binance WebSocket Data Dashboard
 
 This project is a dashboard for displaying real-time data from the Binance WebSocket API.
 
