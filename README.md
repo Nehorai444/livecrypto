@@ -95,4 +95,5 @@ npm start
 ```
 cd server
 node server.js
+node binanceWebsocket.js
 ```
