@@ -1,3 +1,13 @@
+/**
+ * A logging module using Winston for better management of logs with colorized output.
+ * 
+ * Winston is a versatile logging library for Node.js, providing various features like log levels,
+ * transports (e.g., console, file, HTTP), and customizable log formatting.
+ * 
+ * @module logging
+ * @requires winston
+ */
+
 const winston = require("winston");
 
 // Define log levels and colors for better readability
@@ -30,4 +40,11 @@ const logger = winston.createLogger({
   ],
 });
 
+/**
+ * Exports a configured Winston logger instance for use in other modules.
+ * 
+ * @type {Object}
+ * @property {Logger} logger - The configured Winston logger instance.
+ * @memberof logging
+ */
 module.exports = { logger }

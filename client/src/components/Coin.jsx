@@ -1,4 +1,22 @@
-import React, { useState } from 'react'
+/**
+ * Component for displaying detailed information about a specific cryptocurrency.
+ * 
+ * This component renders details such as trading pair, close price, open price,
+ * high price, low price, total traded base asset volume, and total traded quote asset volume.
+ * It also provides inputs for selecting start and end dates for data retrieval, and a button
+ * to trigger the data search. Upon successful search, it displays a graph component with the retrieved data.
+ * 
+ * @module Coin
+ * @param {Object} props - Props passed to the component.
+ * @param {Object} props.val - Object containing details of the cryptocurrency.
+ * @param {number} props.index - Index of the cryptocurrency in the list.
+ * @requires react
+ * @requires react-i18next
+ * @requires Graph
+ * @requires Loader
+ * @requires ApiRequest
+ */
+import React, { useState } from 'react';
 import Graph from './shelves/Graph';
 import { ApiRequest } from '../library/Utilities';
 import { useTranslation } from 'react-i18next';
@@ -22,9 +40,9 @@ export default function Coin(props) {
 
     function onClick() {
         // Check if the start date and end date are not empty
-        if (!startDate || !endDate) return
+        if (!startDate || !endDate) return;
 
-        setIsLoading(true)
+        setIsLoading(true);
 
         // Call the search function from the ApiRequest library
         ApiRequest.search(startDate, endDate, props.val.tradingPair)
@@ -34,8 +52,8 @@ export default function Coin(props) {
                 setFlag(!flag);
             })
             .catch(err => {
-                console.log(err)
-            })
+                console.log(err);
+            });
     }
     return (
         <div className='coin'>
@@ -59,5 +77,5 @@ export default function Coin(props) {
             {isLoading && <Loader />}
             {flag && <Graph data={dataCoin} setFlag={setFlag} />}
         </div>
-    )
+    );
 }

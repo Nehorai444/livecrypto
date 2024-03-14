@@ -1,14 +1,33 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+/**
+ * Component for rendering the menu of the cryptocurrency trading application.
+ * 
+ * This component renders a menu button that toggles a dropdown menu containing links
+ * to different pages/routes of the application. It also provides a language selector
+ * dropdown for changing the application language.
+ * 
+ * @module Menu
+ * @requires react
+ * @requires react-router-dom
+ * @requires react-i18next
+ */
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
 export default function Menu() {
   const { t, i18n } = useTranslation();
 
-  // Function to handle language change
+  /**
+   * Handles the language change event.
+   * 
+   * @param {Object} event - The event object.
+   * @memberof Menu
+   */
   const handleLanguageChange = (event) => {
     const selectedLanguage = event.target.value;
     i18n.changeLanguage(selectedLanguage);
   };
+
   return (
     <div className="menu-container">
       <div>
@@ -27,5 +46,5 @@ export default function Menu() {
         <option value="he">עברית</option>
       </select>
     </div>
-  )
+  );
 }

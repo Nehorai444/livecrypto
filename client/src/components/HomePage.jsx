@@ -1,4 +1,17 @@
-import React, { useEffect, useState } from 'react'
+/**
+ * Component for displaying the home page of the cryptocurrency trading application.
+ * 
+ * This component renders a search input field for filtering cryptocurrency trading data based on
+ * the trading pair. It also displays a list of top coins based on their opening prices.
+ * 
+ * @module HomePage
+ * @param {Object} props - Props passed to the component.
+ * @param {Array} props.data - Array of cryptocurrency trading data.
+ * @requires react
+ * @requires CoinsList
+ * @requires react-i18next
+ */
+import React, { useEffect, useState } from 'react';
 import CoinsList from './CoinsList';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +21,12 @@ export default function HomePage(props) {
   const [searchText, setSearchText] = useState('');
   let filteredArr;
 
+  /**
+   * Handles the search input change event.
+   * 
+   * @param {Object} e - The event object.
+   * @memberof HomePage
+   */
   const handleSearch = (e) => {
     let txt = e.target.value; // Get the value from the search input
 
@@ -49,5 +68,5 @@ export default function HomePage(props) {
         <CoinsList data={topCoins} />
       </div>
     </div>
-  )
+  );
 }
