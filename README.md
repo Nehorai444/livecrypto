@@ -89,7 +89,7 @@ To start the client and server, run the following commands in separate terminal 
 
 ```
 cd client
-npm start
+npm run build
 ```
 
 ```
