@@ -27,8 +27,10 @@ const {logger} = require("./logging")
 const { coinModel, staticCoinModel } = require("./coins");
 const {convertData} = require("./convertData");
 
+require('dotenv').config();
+
 // Set up Express middleware
-const PORT = 4000;
+const PORT = process.env.WS_PORT || 7071;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
