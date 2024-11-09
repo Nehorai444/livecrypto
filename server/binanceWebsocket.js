@@ -23,14 +23,14 @@ const WebSocket = require('ws');
 const pako = require('pako');
 
 // Import custom modules
-const {logger} = require("./logging")
+const {logger} = require("./logging.js")
 const { coinModel, staticCoinModel } = require("./coins");
 const {convertData} = require("./convertData");
 
 require('dotenv').config();
 
 // Set up Express middleware
-const PORT = process.env.WS_PORT || 7071;
+const PORT = process.env.WS_PORT || 6000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -40,6 +40,27 @@ const wss = new WebSocket.Server({ noServer: true });
 // Initialize index for generating unique coinId
 let index = 1;
 
+let coinCache = {}; // Cache to store coin data in memory
+let tickerBuffer = [];
+
+setInterval(async () => {
+    if (tickerBuffer.length > 0) {
+        await coinModel.insertMany(tickerBuffer);
+        tickerBuffer = []; // Reset buffer
+    }
+}, 1000); // Adjust the interval based on traffic
+
+async function loadCoinCache() {
+    const coins = await staticCoinModel.find({});
+    coins.forEach(coin => {
+        coinCache[coin.tradingPair] = coin.coinId;
+    });
+}
+
+loadCoinCache(); // Load cache at startup
+
+
+
 // Handle WebSocket connections
 wss.on('connection', (ws, req) => {
     logger.info('A client connected');
@@ -47,45 +68,31 @@ wss.on('connection', (ws, req) => {
     // Establish WebSocket connection with Binance
     const binanceWebSocket = new WebSocket('wss://stream.binance.com:9443/ws/!ticker@arr');
 
-    // Handle messages from Binance WebSocket
     binanceWebSocket.on('message', async (data) => {
         try {
-            // Parse received data
             const tickerData = JSON.parse(data);
-
-            // Process ticker data
             for (let i = 0; i < tickerData.length; i++) {
-                tickerData[i] = convertData(tickerData[i]); // Convert the data
-
-                let temp = {
-                    tradingPair: tickerData[i].tradingPair
+                tickerData[i] = convertData(tickerData[i]);
+                const { tradingPair } = tickerData[i];
+                
+                if (!coinCache[tradingPair]) {
+                    const newCoin = { tradingPair, coinId: index++ };
+                    coinCache[tradingPair] = newCoin.coinId;
+                    await staticCoinModel.insertMany(newCoin);
                 }
-
-                // Check if the coin exists in the database
-                let existingCoin = await staticCoinModel.find(temp);
-
-                if (existingCoin.length === 0) {
-                    temp.coinId = index++;
-                    // If the coin doesn't exist, insert it into the database
-                    await staticCoinModel.insertMany(temp);
-                }
-
-                // Set the coinId
-                tickerData[i].coinId = !existingCoin.length === 0 ? existingCoin.coinId : temp.coinId;
+    
+                tickerData[i].coinId = coinCache[tradingPair];
             }
-
-            // Store tickerData in the database
+    
             await coinModel.insertMany(tickerData);
-
-            // Compress tickerData
+    
             const compressedData = pako.deflate(JSON.stringify(tickerData), { to: 'string' });
-
-            // Send compressed data to the WebSocket client
             ws.send(compressedData, { binary: true });
         } catch (error) {
             logger.error('Error parsing response data:', error);
         }
     });
+    
 
     // Handle errors from Binance WebSocket
     binanceWebSocket.on('error', (error) => {

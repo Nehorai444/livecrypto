@@ -22,8 +22,7 @@ const { logger } = require("./logging");
 const { coinModel, staticCoinModel } = require("./coins");
 require('dotenv').config();
 
-const PORT = process.env.SERVER_PORT || 8000;
-
+const PORT = process.env.SERVER_PORT || 8080;
 // Serve static files from the client build directory
 app.use(express.static(path.join(__dirname, '../client/build')));
 
@@ -91,5 +90,5 @@ app.get("*", (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  logger.info('Server works on PORT 5000');
+  logger.info('Server works on PORT 8080');
 });

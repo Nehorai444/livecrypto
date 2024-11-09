@@ -13,21 +13,26 @@
  * @requires Loader
  * @requires react-i18next
  */
-import React from 'react';
+import React, { useState } from 'react';
 import Coin from './Coin';
 import "../App.css";
 import Loader from './Loader';
 import { useTranslation } from 'react-i18next';
+import Graph from './shelves/Graph';
 
 export default function CoinsList(props) {
     const { t } = useTranslation();
-    return (
+    const [flag, setFlag] = useState(false);
+    const [dataCoin, setDataCoin] = useState([]);
+
+    if (flag) return <Graph data={dataCoin} setFlag={setFlag} />
+    else return (
         <div className='coinList'>
             <h2 id='titleCoinList'>{t('receivedTradeDataTitle')}</h2>
             <ul>
                 {props.data.length > 0 ? props.data.map((val, index) => ( // If the data is received, map through it and create a Coin component for each item
                     <li key={index}>
-                        <Coin val={val} index={index} />
+                        <Coin value={{val,flag, setFlag, setDataCoin, index}} key={index} />
                     </li>
                 )) : <Loader />}
             </ul>

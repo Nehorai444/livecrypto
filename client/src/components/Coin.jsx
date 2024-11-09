@@ -8,8 +8,8 @@
  * 
  * @module Coin
  * @param {Object} props - Props passed to the component.
- * @param {Object} props.val - Object containing details of the cryptocurrency.
- * @param {number} props.index - Index of the cryptocurrency in the list.
+ * @param {Object} val - Object containing details of the cryptocurrency.
+ * @param {number} index - Index of the cryptocurrency in the list.
  * @requires react
  * @requires react-i18next
  * @requires Graph
@@ -25,11 +25,9 @@ import Loader from './Loader';
 export default function Coin(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [dataCoin, setDataCoin] = useState([]);
-    const [flag, setFlag] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { t, i18n } = useTranslation();
-  
+    const {val, flag, index, setDataCoin, setFlag} = props.value;
     // Function to format the price
     function getFormatPrice(price) {
         return new Intl.NumberFormat('en-US', {
@@ -45,7 +43,7 @@ export default function Coin(props) {
         setIsLoading(true);
 
         // Call the search function from the ApiRequest library
-        ApiRequest.search(startDate, endDate, props.val.tradingPair)
+        ApiRequest.search(startDate, endDate, val.tradingPair)
             .then(res => {
                 setDataCoin(res.data); // Set the dataCoin state to the data from the server
                 setIsLoading(false);
@@ -55,18 +53,18 @@ export default function Coin(props) {
                 console.log(err);
             });
     }
-    return (
+    return (       
         <div className='coin'>
-            <h3 className={i18n.language === "he" ? "rtlText" : "ltrText"}>{t('tradeTitle')} {props.index + 1}:</h3>
+            <h3 className={i18n.language === "he" ? "rtlText" : "ltrText"}>{t('tradeTitle')} {index + 1}:</h3>
             <div className="rtlText">
-                <strong>{t('symbol')}:</strong> {props.val.tradingPair}<br />
+                <strong>{t('symbol')}:</strong> {val.tradingPair}<br />
             </div>
-            <strong>{t('closePrice')}:</strong> {getFormatPrice(props.val.currentPrice)}<br />
-            <strong>{t('openPrice')}:</strong> {getFormatPrice(props.val.openingPrice)}<br />
-            <strong>{t('highPrice')}:</strong> {getFormatPrice(props.val.highestPrice24h)}<br />
-            <strong>{t('lowPrice')}:</strong> {getFormatPrice(props.val.lowestPrice24h)}<br />
-            <strong>{t('totalTradedBaseAssetVolume')}:</strong> {getFormatPrice(props.val.totalTradedVolume)}<br />
-            <strong>{t('totalTradedQuoteAssetVolume')}:</strong> {getFormatPrice(props.val.totalTradedQuoteVolume)}<br />
+            <strong>{t('closePrice')}:</strong> {getFormatPrice(val.currentPrice)}<br />
+            <strong>{t('openPrice')}:</strong> {getFormatPrice(val.openingPrice)}<br />
+            <strong>{t('highPrice')}:</strong> {getFormatPrice(val.highestPrice24h)}<br />
+            <strong>{t('lowPrice')}:</strong> {getFormatPrice(val.lowestPrice24h)}<br />
+            <strong>{t('totalTradedBaseAssetVolume')}:</strong> {getFormatPrice(val.totalTradedVolume)}<br />
+            <strong>{t('totalTradedQuoteAssetVolume')}:</strong> {getFormatPrice(val.totalTradedQuoteVolume)}<br />
             <div className={i18n.language === "he" ? "rtlText" : "ltrText"}>
                 <label htmlFor="startDate">{t('startDateLabel')}:</label> &nbsp;
                 <input type="datetime-local" id="startDate" name="startDate" onChange={e => setStartDate(e.target.value)} /><br />
@@ -75,7 +73,9 @@ export default function Coin(props) {
             </div> <br />
             {!flag && <button id="searchButton" onClick={onClick}>{t('searchButton')}</button>}
             {isLoading && <Loader />}
-            {flag && <Graph data={dataCoin} setFlag={setFlag} />}
+            
+
         </div>
+        
     );
 }

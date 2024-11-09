@@ -19,6 +19,7 @@
  */
 
 const db = require('mongoose');
+const { logger } = require("./logging");
 
 // Load the environment variables
 require('dotenv').config();
@@ -30,13 +31,12 @@ if (!dbUserName || !dbPassword) {
   throw new Error('MONGODB_USERNAME and MONGODB_PASSWORD are required');
 }
 
-const URL = `mongodb://${dbUserName}:${dbPassword}@localhost:27017/mydatabase?authMechanism=DEFAULT&authSource=admin`;
+const URL = 'mongodb+srv://nehorai444:Zaqzaq258654!@cluster0.mgyu73p.mongodb.net/livecrypto';
 
-const { logger } = require("./logging");
 
-db.connect(URL).then(() => {
+db.connect(URL,{ useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
   logger.info('DB is on');
-});
+}).catch(err => console.log(err));
 
 // Mongoose Schema for the staticCoinTable collection
 const staticCoinScheme = db.Schema({
@@ -78,11 +78,17 @@ const coinScheme = db.Schema({
 // Mongoose Model for the coins collection
 const coinModel = new db.model("coins", coinScheme);
 
-// Function to clear the "coins" collection
 async function clearCoinsCollection() {
   try {
-    await coinModel.deleteMany({});
-    logger.info('Coins collection cleared');
+    // Get the current time and calculate the time 5 minutes ago
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+    // Delete all coins older than the last 5 minutes
+    const result = await coinModel.deleteMany({
+      eventTimestamp: { $lt: fiveMinutesAgo }
+    });
+
+    logger.info(`Coins collection cleared, deleted ${result.deletedCount} records older than 5 minutes`);
   } catch (error) {
     logger.error('Error clearing coins collection:', error);
   }

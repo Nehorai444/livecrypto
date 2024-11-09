@@ -1,8 +1,8 @@
 const search = (startDate, endDate, coinName) => {
     return new Promise((resolve, reject) => {
-        const url = 'http://localhost:8000/api/searchCoinData';
+        const url = `http://${window.location.hostname}/api/searchCoinData`;
         let requestInit = {
-            method: "post",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             }, body: JSON.stringify({ startDate, endDate, coinName })

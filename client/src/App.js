@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     // Create a new WebSocket connection when the component mounts
-    const ws = new WebSocket('ws://127.0.0.1:7071');
+    const ws = new WebSocket(`ws://${window.location.hostname}:6000`);
     ws.binaryType = 'arraybuffer'; // Set binary type for WebSocket
 
     ws.onopen = () => {
@@ -24,7 +24,6 @@ function App() {
 
     ws.onmessage = (event) => {
       const data = event.data;
-
       if (data !== undefined) {
         
         try {
@@ -44,7 +43,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    document.title = "CoinMaster"
+    document.title = "LiveCrypto"
   }, [])
   return (
     <div className="App">
