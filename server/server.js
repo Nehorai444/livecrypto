@@ -1,94 +1,140 @@
-/**
- * Express server script for handling requests related to cryptocurrency data search.
- * 
- * This script sets up an Express server to serve static files, parse incoming request bodies,
- * and handle API requests to search for cryptocurrency data within a specified date range.
- * 
- * @module server
- * @requires express
- * @requires body-parser
- * @requires path
- * @requires logging
- * @requires coins
- */
-
+// Import required modules
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+const http = require('http');
+const WebSocket = require('ws');
+const pako = require('pako');
 const path = require('path');
-const { logger } = require("./logging");
-
-// Import the coinModel and staticCoinModel from the coins.js file
-const { coinModel, staticCoinModel } = require("./coins");
 require('dotenv').config();
 
-const PORT = process.env.SERVER_PORT || 8080;
-// Serve static files from the client build directory
-app.use(express.static(path.join(__dirname, '../client/build')));
+// Import custom modules (assuming you have these modules implemented)
+const { logger } = require("./logging");
+const { coinModel, staticCoinModel } = require("./coins");
+const { convertData } = require("./convertData");
+const app = express();
 
-// Parse request bodies
+const cors = require('cors');
+
+// Serve static files from the React build directory
+app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(cors()); // allow all domains, or configure it to allow only specific domains
+
+
+// Parse incoming request bodies as JSON
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-/**
- * POST route to handle searching for cryptocurrency data.
- * 
- * @name POST /api/searchCoinData
- * @function
- * @memberof server
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- */
-app.post('/api/searchCoinData', async (req, res) => {
+// Create the HTTP server and WebSocket server
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ noServer: true });
+
+// Handle HTTP WebSocket upgrade requests
+server.on('upgrade', (req, socket, head) => {
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    wss.emit('connection', ws, req);
+  });
+});
+
+// Cache to store coin data in memory and buffer for bulk insertion into MongoDB
+let coinCache = {};
+let tickerBuffer = [];
+let index = 1; // Unique ID generator for new coins
+
+// Bulk insert cached data to MongoDB every second
+setInterval(async () => {
+  if (tickerBuffer.length > 0) {
+    await coinModel.insertMany(tickerBuffer);
+    tickerBuffer = []; // Reset buffer after insertion
+  }
+}, 1000);
+
+// Load initial cache from MongoDB at startup
+async function loadCoinCache() {
+  const coins = await staticCoinModel.find({});
+  coins.forEach(coin => {
+    coinCache[coin.tradingPair] = coin.coinId;
+  });
+}
+loadCoinCache(); // Initial call to populate the cache
+
+// Connect to Binance WebSocket API
+const binanceWebSocket = new WebSocket('wss://stream.binance.com:9443/ws/!ticker@arr');
+
+binanceWebSocket.on('message', async (data) => {
   try {
-    const { startDate, endDate, coinName } = req.body;
+    const tickerData = JSON.parse(data);
+    for (let i = 0; i < tickerData.length; i++) {
+      tickerData[i] = convertData(tickerData[i]);
+      const { tradingPair } = tickerData[i];
 
-    // Parse the startDate and endDate into JavaScript Date objects
-    const parsedStartDate = new Date(startDate);
-    const parsedEndDate = new Date(endDate);
+      if (!coinCache[tradingPair]) {
+        const newCoin = { tradingPair, coinId: index++ };
+        coinCache[tradingPair] = newCoin.coinId;
+        await staticCoinModel.insertMany(newCoin);
+      }
 
-    // Check if the parsed dates are valid
-    if (!parsedStartDate || !parsedEndDate || !coinName) {
-      logger.error(`Data from the client not arrived`);
-
-      // If the parsed dates are invalid, return an error
-      return res.status(400).json({ status: 0, data: [], errors: ['Please provide valid startDate, endDate, and coinName.'] });
+      tickerData[i].coinId = coinCache[tradingPair];
     }
 
-    const query = {
-      'eventTimestamp': { $gte: parsedStartDate, $lte: parsedEndDate },
-      'tradingPair': coinName,
-    };
+    await coinModel.insertMany(tickerData);
 
-    // Find the coin data in the database
-    const coinData = await coinModel.find(query);
-
-    if (coinData.length > 0) {
-      logger.info(`The user gets data about ${coinName}.`);
-
-      // If the coin data is found, return it to the client
-      res.status(200).json({ status: 1, data: coinData, errors: [] });
-    }
+    // Broadcast the data to all connected clients
+    const compressedData = pako.deflate(JSON.stringify(tickerData), { to: 'string' });
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(compressedData, { binary: true });
+      }
+    });
   } catch (error) {
-    logger.error('Error searching for coin data:', error);
-    res.status(500).json({ status: 0, data: [], errors: ['An error occurred while searching for coin data.'] });
+    logger.error('Error parsing response data:', error);
   }
 });
 
-/**
- * GET route to serve the React client application.
- * 
- * @name GET *
- * @function
- * @memberof server
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- */
+binanceWebSocket.on('error', (error) => logger.error('Binance WebSocket error:', error));
+
+// Handle WebSocket connections for users
+wss.on('connection', (ws) => {
+  logger.info('A client connected');
+
+  ws.on('close', () => {
+    logger.info('A client disconnected');
+  });
+});
+
+
+// API endpoint for searching cryptocurrency data within a date range
+app.post('/api/searchCoinData', async (req, res) => {
+  try {
+    const { startDate, endDate, coinName } = req.body;
+    const parsedStartDate = new Date(startDate);
+    const parsedEndDate = new Date(endDate);
+
+    if (!parsedStartDate || !parsedEndDate || !coinName) {
+      logger.error('Invalid request parameters');
+      return res.status(400).json({ status: 0, errors: ['Invalid request parameters'] });
+    }
+
+    const query = { eventTimestamp: { $gte: parsedStartDate, $lte: parsedEndDate }, tradingPair: coinName };
+    const coinData = await coinModel.find(query);
+
+    if (coinData.length > 0) {
+      logger.info(`Data found for ${coinName}`);
+      return res.status(200).json({ status: 1, data: coinData, errors: [] });
+    } else {
+      return res.status(404).json({ status: 0, errors: [`No data found for ${coinName}`] });
+    }
+  } catch (error) {
+    logger.error('Error searching for coin data:', error);
+    return res.status(500).json({ status: 0, errors: ['Internal server error'] });
+  }
+});
+
+// Catch-all route to serve the React client from the build folder
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
-// Start the server
-app.listen(PORT, () => {
-  logger.info('Server works on PORT 8080');
+// Start the server and listen on the specified port
+server.listen(process.env.PORT, () => {
+  logger.info(`Express server running on PORT ${process.env.PORT}`);
 });

@@ -1,7 +1,7 @@
-# Use Node.js as the base image
-FROM node:16
+# Use an official Node.js runtime as a parent image
+FROM node:14
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
 # Copy package.json and package-lock.json
@@ -10,16 +10,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the React app source code
+# Copy the rest of the application code to the container
 COPY . .
 
-# Build the React app for production
+# Build the client application
 RUN npm run build
 
-# Expose port 80 (this will be mapped to port 8080)
-EXPOSE 80
+# Expose the port the app runs on
+EXPOSE 3000
 
-# Use `serve` to serve the static files built by React
-RUN npm install -g serve
-
-CMD ["serve", "-s", "build"]
+# Command to run the application
+CMD ["npm", "start"]

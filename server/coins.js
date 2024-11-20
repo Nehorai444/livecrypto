@@ -18,37 +18,27 @@
  * @requires logging
  */
 
-const db = require('mongoose');
 const { logger } = require("./logging");
+const db = require('mongoose');
 
-// Load the environment variables
-require('dotenv').config();
-
-const dbUserName = process.env.MONGODB_USERNAME;
-const dbPassword = process.env.MONGODB_PASSWORD;
-
-if (!dbUserName || !dbPassword) {
-  throw new Error('MONGODB_USERNAME and MONGODB_PASSWORD are required');
-}
-
-const URL = 'mongodb+srv://nehorai444:Zaqzaq258654!@cluster0.mgyu73p.mongodb.net/livecrypto';
-
-
-db.connect(URL,{ useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+// Connect to MongoDB using Mongoose
+db.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
   logger.info('DB is on');
 }).catch(err => console.log(err));
 
 // Mongoose Schema for the staticCoinTable collection
-const staticCoinScheme = db.Schema({
+const staticCoinScheme = new db.Schema({
   tradingPair: String,
   coinId: Number
 });
 
 // Mongoose Model for the staticCoinTable collection
 const staticCoinModel = new db.model("staticCoinTable", staticCoinScheme);
-
 // Mongoose Schema for the coins collection
-const coinScheme = db.Schema({
+const coinScheme = new db.Schema({
   eventType: String,
   coinId: Number,
   eventTimestamp: Date,

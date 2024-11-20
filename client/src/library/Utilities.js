@@ -1,6 +1,6 @@
 const search = (startDate, endDate, coinName) => {
     return new Promise((resolve, reject) => {
-        const url = `http://${window.location.hostname}/api/searchCoinData`;
+        const url = `${window.location.href}api/searchCoinData`;
         let requestInit = {
             method: "POST",
             headers: {

@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     // Create a new WebSocket connection when the component mounts
-    const ws = new WebSocket(`ws://${window.location.hostname}:6000`);
+    const ws = new WebSocket(`ws://${window.location.hostname}`);
     ws.binaryType = 'arraybuffer'; // Set binary type for WebSocket
 
     ws.onopen = () => {
@@ -36,8 +36,16 @@ function App() {
       }
     };
 
-    // Close the WebSocket connection when the component unmounts
+    // Add event listener for beforeunload event to close WebSocket connection
+    const handleBeforeUnload = () => {
+      ws.close();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup function to remove event listener and close WebSocket connection
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       ws.close();
     };
   }, []);

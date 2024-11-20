@@ -26,6 +26,7 @@ export default function Coin(props) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
     const { t, i18n } = useTranslation();
     const {val, flag, index, setDataCoin, setFlag} = props.value;
     // Function to format the price
@@ -45,9 +46,14 @@ export default function Coin(props) {
         // Call the search function from the ApiRequest library
         ApiRequest.search(startDate, endDate, val.tradingPair)
             .then(res => {
-                setDataCoin(res.data); // Set the dataCoin state to the data from the server
-                setIsLoading(false);
-                setFlag(!flag);
+                if (res.status === 0) {
+                    setDataCoin(res.data); // Set the dataCoin state to the data from the server
+                    setIsLoading(false);
+                    setFlag(!flag);
+                } else {
+                    setError(res.errors[0]);
+                    setIsLoading(false);
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -73,7 +79,7 @@ export default function Coin(props) {
             </div> <br />
             {!flag && <button id="searchButton" onClick={onClick}>{t('searchButton')}</button>}
             {isLoading && <Loader />}
-            
+            {error && <p>{ error }</p>}
 
         </div>
         
