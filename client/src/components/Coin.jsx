@@ -46,7 +46,7 @@ export default function Coin(props) {
         // Call the search function from the ApiRequest library
         ApiRequest.search(startDate, endDate, val.tradingPair)
             .then(res => {
-                if (res.status === 0) {
+                if (res.status === 1) {
                     setDataCoin(res.data); // Set the dataCoin state to the data from the server
                     setIsLoading(false);
                     setFlag(!flag);
@@ -73,9 +73,27 @@ export default function Coin(props) {
             <strong>{t('totalTradedQuoteAssetVolume')}:</strong> {getFormatPrice(val.totalTradedQuoteVolume)}<br />
             <div className={i18n.language === "he" ? "rtlText" : "ltrText"}>
                 <label htmlFor="startDate">{t('startDateLabel')}:</label> &nbsp;
-                <input type="datetime-local" id="startDate" name="startDate" onChange={e => setStartDate(e.target.value)} /><br />
+                <input
+                    type="datetime-local"
+                    id="startDate"
+                    name="startDate"
+                    onChange={e => {
+                        const localDate = new Date(e.target.value);
+                        const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+                        setStartDate(utcDate);
+                    }}
+                />  <br />
                 <label htmlFor="endDate">{t('endDateLabel')}:</label> &nbsp;
-                <input type="datetime-local" id="endDate" name="endDate" onChange={e => setEndDate(e.target.value)} />
+                <input
+                    type="datetime-local"
+                    id="endDate"
+                    name="endDate"
+                    onChange={e => {
+                        const localDate = new Date(e.target.value);
+                        const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000); // Convert to UTC
+                        setEndDate(utcDate);
+                    }}
+                />
             </div> <br />
             {!flag && <button id="searchButton" onClick={onClick}>{t('searchButton')}</button>}
             {isLoading && <Loader />}

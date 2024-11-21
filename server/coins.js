@@ -22,10 +22,7 @@ const { logger } = require("./logging");
 const db = require('mongoose');
 
 // Connect to MongoDB using Mongoose
-db.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
+db.connect(process.env.MONGODB_URI).then(() => {
   logger.info('DB is on');
 }).catch(err => console.log(err));
 

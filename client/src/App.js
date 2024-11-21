@@ -15,7 +15,8 @@ function App() {
 
   useEffect(() => {
     // Create a new WebSocket connection when the component mounts
-    const ws = new WebSocket(`ws://${window.location.hostname}`);
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const ws = new WebSocket(`${protocol}${window.location.hostname}`);
     ws.binaryType = 'arraybuffer'; // Set binary type for WebSocket
 
     ws.onopen = () => {

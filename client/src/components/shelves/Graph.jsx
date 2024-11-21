@@ -8,7 +8,7 @@ const Graph = (props) => {
 
     // Assuming data is an array of objects with eventTimestamp and currentPrice properties
     const formattedData = data.map((entry) => ({
-        time: new Date(entry.eventTimestamp).toLocaleTimeString(),
+        time: new Date(entry.eventTimestamp).toUTCString(),
         price: entry.currentPrice,
     }));
 

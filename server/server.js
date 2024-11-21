@@ -14,9 +14,11 @@ const { convertData } = require("./convertData");
 const app = express();
 
 const cors = require('cors');
+const { start } = require('repl');
+const e = require('express');
 
 // Serve static files from the React build directory
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join('/app/client/build')));
 app.use(cors()); // allow all domains, or configure it to allow only specific domains
 
 
@@ -57,6 +59,7 @@ async function loadCoinCache() {
 }
 loadCoinCache(); // Initial call to populate the cache
 
+
 // Connect to Binance WebSocket API
 const binanceWebSocket = new WebSocket('wss://stream.binance.com:9443/ws/!ticker@arr');
 
@@ -65,6 +68,8 @@ binanceWebSocket.on('message', async (data) => {
     const tickerData = JSON.parse(data);
     for (let i = 0; i < tickerData.length; i++) {
       tickerData[i] = convertData(tickerData[i]);
+      let isoDate = new Date(tickerData[i].eventTimestamp).toISOString();
+      tickerData[i].eventTimestamp = isoDate;
       const { tradingPair } = tickerData[i];
 
       if (!coinCache[tradingPair]) {
@@ -106,32 +111,35 @@ wss.on('connection', (ws) => {
 app.post('/api/searchCoinData', async (req, res) => {
   try {
     const { startDate, endDate, coinName } = req.body;
-    const parsedStartDate = new Date(startDate);
-    const parsedEndDate = new Date(endDate);
 
-    if (!parsedStartDate || !parsedEndDate || !coinName) {
+    if ( !startDate || !endDate || !coinName ) {
       logger.error('Invalid request parameters');
       return res.status(400).json({ status: 0, errors: ['Invalid request parameters'] });
     }
+    const coin = await staticCoinModel.findOne({ tradingPair: coinName });
 
-    const query = { eventTimestamp: { $gte: parsedStartDate, $lte: parsedEndDate }, tradingPair: coinName };
+    if (!coin) {
+      logger.error('Coin not found');
+      return res.status(404).json({ status: 0, data: {}, errors: ['Coin not found'] });
+    }
+    const utcDateStart = new Date(startDate);
+    const utcDateEnd = new Date(endDate);
+
+    // Format dates to ISO string
+    const query = { eventTimestamp: { $gte: utcDateStart, $lte: utcDateEnd }, coinId: coin.coinId };
+
     const coinData = await coinModel.find(query);
 
-    if (coinData.length > 0) {
-      logger.info(`Data found for ${coinName}`);
-      return res.status(200).json({ status: 1, data: coinData, errors: [] });
-    } else {
-      return res.status(404).json({ status: 0, errors: [`No data found for ${coinName}`] });
-    }
+    res.status(200).send({ status: 1, data: coinData, errors:[]});
   } catch (error) {
-    logger.error('Error searching for coin data:', error);
-    return res.status(500).json({ status: 0, errors: ['Internal server error'] });
+    logger.error('Error searching coin data:', error);
+    res.status(500).json({ status: 0, errors: ['Internal server error'] });
   }
 });
 
 // Catch-all route to serve the React client from the build folder
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.join('/app/client/build', 'index.html'));
 });
 
 // Start the server and listen on the specified port
