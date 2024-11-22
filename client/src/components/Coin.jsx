@@ -23,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 import Loader from './Loader';
 
 export default function Coin(props) {
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const { t, i18n } = useTranslation();
@@ -59,6 +59,17 @@ export default function Coin(props) {
                 console.log(err);
             });
     }
+
+    function convertToUTC(datetimeLocalValue) {
+        // Parse the input value into a Date object
+        const localDate = new Date(datetimeLocalValue);
+    
+        // Get the UTC string in ISO format
+        const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+    
+        return utcDate.toISOString(); // Convert to ISO 8601 format
+    }
+
     return (       
         <div className='coin'>
             <h3 className={i18n.language === "he" ? "rtlText" : "ltrText"}>{t('tradeTitle')} {index + 1}:</h3>
@@ -72,27 +83,28 @@ export default function Coin(props) {
             <strong>{t('totalTradedBaseAssetVolume')}:</strong> {getFormatPrice(val.totalTradedVolume)}<br />
             <strong>{t('totalTradedQuoteAssetVolume')}:</strong> {getFormatPrice(val.totalTradedQuoteVolume)}<br />
             <div className={i18n.language === "he" ? "rtlText" : "ltrText"}>
-                <label htmlFor="startDate">{t('startDateLabel')}:</label> &nbsp;
-                <input
-                    type="datetime-local"
-                    id="startDate"
-                    name="startDate"
-                    onChange={e => {
-                        const localDate = new Date(e.target.value);
-                        const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
-                        setStartDate(utcDate);
-                    }}
-                />  <br />
-                <label htmlFor="endDate">{t('endDateLabel')}:</label> &nbsp;
-                <input
-                    type="datetime-local"
-                    id="endDate"
-                    name="endDate"
-                    onChange={e => {
-                        const localDate = new Date(e.target.value);
-                        const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000); // Convert to UTC
-                        setEndDate(utcDate);
-                    }}
+            <label htmlFor="startDate">{t('startDateLabel')}:</label> &nbsp;
+            <input
+                type="datetime-local"
+                id="startDate"
+                name="startDate"
+                onChange={e => {
+                const localDate = new Date(e.target.value);
+                console.log(e.target.value);
+                setStartDate(localDate);
+            }}
+            />
+            <br />
+            <label htmlFor="endDate">{t('endDateLabel')}:</label> &nbsp;
+            <input
+                type="datetime-local"
+                id="endDate"
+                name="endDate"
+                onChange={e => {
+                    const localDate = new Date(e.target.value);
+                    console.log(localDate);
+                    setEndDate(localDate);
+                }}
                 />
             </div> <br />
             {!flag && <button id="searchButton" onClick={onClick}>{t('searchButton')}</button>}

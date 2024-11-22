@@ -68,8 +68,8 @@ binanceWebSocket.on('message', async (data) => {
     const tickerData = JSON.parse(data);
     for (let i = 0; i < tickerData.length; i++) {
       tickerData[i] = convertData(tickerData[i]);
-      let isoDate = new Date(tickerData[i].eventTimestamp).toISOString();
-      tickerData[i].eventTimestamp = isoDate;
+      // let isoDate = tickerData[i].eventTimestamp;
+      // tickerData[i].eventTimestamp = isoDate;
       const { tradingPair } = tickerData[i];
 
       if (!coinCache[tradingPair]) {
@@ -111,7 +111,7 @@ wss.on('connection', (ws) => {
 app.post('/api/searchCoinData', async (req, res) => {
   try {
     const { startDate, endDate, coinName } = req.body;
-
+    console.log(req.body);
     if ( !startDate || !endDate || !coinName ) {
       logger.error('Invalid request parameters');
       return res.status(400).json({ status: 0, errors: ['Invalid request parameters'] });
@@ -122,11 +122,9 @@ app.post('/api/searchCoinData', async (req, res) => {
       logger.error('Coin not found');
       return res.status(404).json({ status: 0, data: {}, errors: ['Coin not found'] });
     }
-    const utcDateStart = new Date(startDate);
-    const utcDateEnd = new Date(endDate);
-
+    console.log(startDate, endDate);
     // Format dates to ISO string
-    const query = { eventTimestamp: { $gte: utcDateStart, $lte: utcDateEnd }, coinId: coin.coinId };
+    const query = { eventTimestamp: { $gte: startDate, $lte: endDate }, coinId: coin.coinId };
 
     const coinData = await coinModel.find(query);
 
