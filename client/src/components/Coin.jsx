@@ -60,15 +60,6 @@ export default function Coin(props) {
             });
     }
 
-    function convertToUTC(datetimeLocalValue) {
-        // Parse the input value into a Date object
-        const localDate = new Date(datetimeLocalValue);
-    
-        // Get the UTC string in ISO format
-        const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-    
-        return utcDate.toISOString(); // Convert to ISO 8601 format
-    }
 
     return (       
         <div className='coin'>
