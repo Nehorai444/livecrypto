@@ -107,7 +107,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
-- Cryptocurrency data API used: [API Name]  
+- Cryptocurrency data source: Binance WebSocket API
 - Special thanks to all contributors.  
 
 ---
